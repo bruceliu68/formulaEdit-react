@@ -1,0 +1,16 @@
+{
+  "name": "formulaEdit-react",
+  "version": "1.0.0",
+  "description": "react公式编辑器",
+  "main": "src/Codemirror/index.js",
+  "keywords": [
+    "formulaEdit",
+    "formulaEdit-react"
+  ],
+  "author": "bo.liu@tongdun.cn",
+  "license": "MIT",
+  "dependencies": {
+    "codemirror": "^5.46.0",
+    "react": "^16.8.6"
+  }
+}
