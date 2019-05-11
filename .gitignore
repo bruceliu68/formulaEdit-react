@@ -1,6 +1,11 @@
-*.log
-*.swp
-.idea
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# production
+/dist
+
+# misc
 .DS_Store
-bower_components
-node_modules
+npm-debug.log*

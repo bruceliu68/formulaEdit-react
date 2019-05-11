@@ -1,24 +1,36 @@
 {
-    "name": "formula-edit-react",
-    "version": "1.0.0",
-    "description": "react公式编辑器",
-    "main": "index.js",
-    "dependencies": {
-        "codemirror": "^5.46.0",
-        "react": "^16.8.6"
-    },
-    "devDependencies": {},
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/bruceliu68/formulaEdit-react.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/bruceliu68/formulaEdit-react/issues"
-    },
-    "homepage": "https://github.com/bruceliu68/formulaEdit-react#readme"
+  "name": "formula-edit-react",
+  "version": "1.0.0",
+  "description": "react公式编辑器",
+  "main": "src/components/Codemirror/index.js",
+  "keywords": [
+    "formula",
+    "formula-edit",
+    "formula-edit-react"
+  ],
+  "author": "bo.liu@tongdun.cn",
+  "license": "MIT",
+  "scripts": {
+    "start": "roadhog server",
+    "build": "roadhog build",
+    "lint": "eslint --ext .js src test",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "dva": "^2.4.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "babel-plugin-dva-hmr": "^0.3.2",
+    "eslint": "^4.14.0",
+    "eslint-config-umi": "^0.1.1",
+    "eslint-plugin-flowtype": "^2.34.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "husky": "^0.12.0",
+    "redbox-react": "^1.4.3",
+    "roadhog": "^2.5.0-beta.4"
+  }
 }
