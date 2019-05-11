@@ -1,15 +1,15 @@
-# formulaEdit-react
+# formula-edit-react
 
 react公式编辑器
 
 ## Usage
 
-### formulaEdit-react
+### formula-edit-react
 
 安装
 
 ```sh
-npm install --save-dev formulaEdit-react
+npm install --save-dev formula-edit-react
 ```
 使用
 
