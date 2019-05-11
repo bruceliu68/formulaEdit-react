@@ -2,7 +2,7 @@
   "name": "formula-edit-react",
   "version": "1.1.0",
   "description": "react公式编辑器",
-  "main": "src/components/Codemirror/index.js",
+  "main": "src/components/Codemirror",
   "keywords": [
     "formula",
     "formula-edit",
@@ -17,6 +17,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "codemirror": "^5.46.0",
     "dva": "^2.4.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
