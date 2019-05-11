@@ -1,0 +1,64 @@
+.m-codemirror{
+    position: relative;
+    overflow: hidden;
+    border: #d7d7d7 solid 1px;
+}
+.m-codemirror .cm-s-3024-day .cm-field-keyword, .m-codemirror .cm-s-3024-night .cm-field-keyword{
+    color: #FF9800;
+}
+.m-codemirror .cm-s-3024-day .cm-boolean-keyword, .m-codemirror .cm-s-3024-night .cm-boolean-keyword{
+    color: #673AB7;
+}
+.m-codemirror .cm-s-3024-day .cm-nomal-keyword, .m-codemirror .cm-s-3024-night .cm-nomal-keyword{
+    color: #F44336;
+    border-bottom: #F44336 1px dotted;
+}
+.m-codemirror .codemirror-tipbox{
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    background: #fff;
+    width: 200px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ccc;
+    font-size: 12px;
+    padding: 2px 0;
+}
+.m-codemirror .codemirror-tipbox .codemirror-tipbox-search{
+    padding: 0 10px;
+    border-bottom: dashed #ccc 1px;
+}
+.m-codemirror .codemirror-tipbox .codemirror-tipbox-search input{
+    width: 100%;
+    outline: none;
+    border: none;
+    height: 28px;
+}
+.m-codemirror .codemirror-tipbox .codemirror-tipbox-nodata{
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    color: #ccc;
+}
+.m-codemirror .codemirror-tipbox ul{
+    margin: 0;
+    padding: 0;
+    max-height: 226px;
+    overflow: auto;
+}
+.m-codemirror .codemirror-tipbox ul li{
+    list-style: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.m-codemirror .codemirror-tipbox ul li:hover{
+    background: #eee;
+}
+.m-codemirror .codemirror-tipbox ul .cm-active{
+    background: #eee;
+}
+.m-codemirror .codemirror-tipbox ul .cm-func-active{
+    background: #eee;
+}
