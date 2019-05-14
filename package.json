@@ -1,37 +1,42 @@
 {
   "name": "formula-edit-react",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "react公式编辑器",
-  "main": "src/components/Codemirror",
   "keywords": [
     "formula",
     "formula-edit",
     "formula-edit-react"
   ],
+  "main": "dist/bundle.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "webpack --env.NODE_ENV=production",
+    "dev": "webpack-dev-server"
+  },
   "author": "bo.liu@tongdun.cn",
   "license": "MIT",
-  "scripts": {
-    "start": "roadhog server",
-    "build": "roadhog build",
-    "lint": "eslint --ext .js src test",
-    "precommit": "npm run lint"
-  },
   "dependencies": {
     "codemirror": "^5.46.0",
-    "dva": "^2.4.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
+    "prop-types": "15.6.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.7.0"
   },
   "devDependencies": {
-    "babel-plugin-dva-hmr": "^0.3.2",
-    "eslint": "^4.14.0",
-    "eslint-config-umi": "^0.1.1",
-    "eslint-plugin-flowtype": "^2.34.1",
-    "eslint-plugin-import": "^2.6.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0",
-    "husky": "^0.12.0",
-    "redbox-react": "^1.4.3",
-    "roadhog": "^2.5.0-beta.4"
+    "@babel/core": "7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/preset-env": "7.2.3",
+    "@babel/preset-react": "7.0.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "0.28.9",
+    "html-webpack-plugin": "3.2.0",
+    "style-loader": "0.19.1",
+    "webpack": "4.29.0",
+    "webpack-cli": "3.2.1",
+    "webpack-dev-server": "3.1.14",
+    "webpack-node-externals": "1.6.0"
   }
 }
