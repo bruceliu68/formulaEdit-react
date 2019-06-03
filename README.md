@@ -21,6 +21,7 @@ npm install --save-dev formula-edit-react
     fieldList={fieldList}
     readOnly={false}
     id="testId"
+    lineNumber={true}
     onChange={(code) => this.getCode(code)}
 />
 ```
@@ -44,6 +45,7 @@ fieldList: [
 | height    | number  |  300     |   非必填  | 高度设置       |
 | theme    | string  |  3024-day     |   非必填  | 主题: 目前只支持两种：3024-day，3024-night |
 | readOnly  | boolean |  false   |   非必填  | 设置只读       |
+| lineNumber  | boolean |  false   |   非必填  | 设置行号       |
 | fieldList | array   |  无      |   非必填  | 字段列表       |
 | onChange  | function|  无      |   必填    | 返回code       |
 

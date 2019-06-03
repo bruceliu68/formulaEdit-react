@@ -24,6 +24,7 @@ ReactDOM.render(
         fieldList={fieldList}
         readOnly={false}
         id="testId"
+        lineNumber={true}
         onChange={getCode}
     />,
     document.getElementById('app')

@@ -34,7 +34,7 @@ export default class FormulaEdit extends PureComponent {
 	}
 
 	componentDidMount() {
-		const { defaultCode, fieldList, id, readOnly, theme } = this.props;
+		const { defaultCode, fieldList, id, readOnly, theme, lineNumber } = this.props;
 		this.setState({
 			copyFieldList: Object.assign([], fieldList)
 		});
@@ -42,7 +42,7 @@ export default class FormulaEdit extends PureComponent {
 		this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
 			mode: "defineScript",
 			theme: theme ? theme : "3024-day",
-			lineNumbers: true,
+			lineNumbers: !lineNumber ? false : true,
 			readOnly: readOnly ? "nocursor" : false
 		});
 		this.CodeMirrorEditor.setValue(defaultCode);
