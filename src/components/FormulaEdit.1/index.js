@@ -1,7 +1,7 @@
 /*
  * @Author: liubo
  * @CreatDate: 2019-02-19 18:24:32
- * @Describe: 计算公式编辑器组件
+ * @Describe: 编辑器组件
  */
 
 import React, { PureComponent } from "react";
@@ -18,78 +18,40 @@ export default class FormulaEdit extends PureComponent {
 		posLeft: 0,
 		posTop: 0,
 		tipShow: false,
-		tipShowType: null, // @, #
-		dropList: [],
-		blurFlag: false,
-		fieldList: [],
-		methodList: [],
-		normalList: []
+		inputValue: "",
+		copyFieldList: [],
+		blurFlag: false
 	};
 
 	constructor(props) {
 		super(props);
-		this.ref = React.createRef();
-	}
-
-	setLocalStorage = () => {
-		const { fieldList = [], methodList = [], normalList = [] } = this.props;
-		// 字段存本地，供分词高亮使用
-		localStorage.codemirrorFieldList = this.getLoacalList(fieldList, "@");
-		localStorage.codemirrorMethodList = this.getLoacalList(methodList, "#");
-		localStorage.codemirrorNormalList = this.getLoacalList(normalList, "");
-	}
-
-	getLoacalList = (list, type) => {
-		// 排序，把长的放前面
-		list.sort((a, b) => {
-			if (a.name.length > b.name.length) {
-				return -1;
-			}
-			if (a.name.length < b.name.length) {
-				return 1;
-			}
-			return 0;
-		});
-		let codemirrorList = [];
-		for (let i = 0; i < list.length; i++) {
-			codemirrorList.push(`${type}${list[i].name}`);
+		const { fieldList } = props;
+		let codemirrorFieldList = [];
+		for (let i = 0; i < fieldList.length; i++) {
+			codemirrorFieldList.push(`@${fieldList[i].name}`);
 		}
-		let obj = {};
-		if (type === "@") obj.fieldList = list;
-		if (type === "#") obj.methodList = list;
-		if (type === "") obj.normalList = list;
-		this.setState({ ...obj });
-		return JSON.stringify(codemirrorList);
+		localStorage.codemirrorFieldList = codemirrorFieldList;
 	}
 
 	componentDidMount() {
-		const { defaultValue = "", readOnly = false, theme = "3024-day", lineNumber = true, height = 300 } = this.props;
-		const { current } = this.ref;
-
-		this.setLocalStorage();
-
-		this.CodeMirrorEditor = CodeMirror.fromTextArea(current, {
+		const { defaultCode, fieldList, id, readOnly, theme, lineNumber } = this.props;
+		this.setState({
+			copyFieldList: Object.assign([], fieldList)
+		});
+		let myTextarea = document.getElementById(id);
+		this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
 			mode: "defineScript",
-			theme: theme,
-			lineNumbers: lineNumber,
+			theme: theme ? theme : "3024-day",
+			lineNumbers: !lineNumber ? false : true,
 			readOnly: readOnly ? "nocursor" : false
 		});
-		this.CodeMirrorEditor.setValue(defaultValue);
-		this.CodeMirrorEditor.setSize("auto", height);
+		this.CodeMirrorEditor.setValue(defaultCode);
 		this.CodeMirrorEditor.on("cursorActivity", (cm) => {
 			this.cursorActivity(cm);
 		});
 		this.CodeMirrorEditor.on("changes", (cm) => {
 			if (this.props.onChange) {
-				const { fieldList, methodList, normalList } = this.state;
-				const errorkeyword = document.body.querySelector(".cm-nomal-keyword");
-				const data = {
-					fieldList,
-					methodList,
-					normalList,
-					errorMsg: errorkeyword ? "存在错误代码" : null
-				};
-				this.props.onChange(cm.getValue(), data);
+				this.props.onChange(cm.getValue());
 			}
 		});
 		this.CodeMirrorEditor.on("focus", (cm) => {
@@ -101,7 +63,7 @@ export default class FormulaEdit extends PureComponent {
 			"Up": (cm) => {
 				const { tipShow } = this.state;
 				if (tipShow) {
-					this.enterFuc("up");
+					this.enterFuc("up", "@");
 				} else {
 					cm.execCommand("goLineUp");
 				}
@@ -109,7 +71,7 @@ export default class FormulaEdit extends PureComponent {
 			"Down": (cm) => {
 				const { tipShow } = this.state;
 				if (tipShow) {
-					this.enterFuc("down");
+					this.enterFuc("down", "@");
 				} else {
 					cm.execCommand("goLineDown");
 				}
@@ -117,7 +79,7 @@ export default class FormulaEdit extends PureComponent {
 			"Enter": (cm) => {
 				const { tipShow } = this.state;
 				if (tipShow) {
-					this.enterFuc("enter");
+					this.enterFuc("enter", "@");
 				} else {
 					cm.execCommand("newlineAndIndent");
 				}
@@ -126,8 +88,8 @@ export default class FormulaEdit extends PureComponent {
 	}
 
 	componentDidUpdate(prevProps) {
-		const code = prevProps.defaultValue;
-		const nextCode = this.props.defaultValue;
+		const code = prevProps.defaultCode;
+		const nextCode = this.props.defaultCode;
 		if (code !== nextCode) {
 			this.CodeMirrorEditor.setValue(nextCode);
 		}
@@ -166,7 +128,7 @@ export default class FormulaEdit extends PureComponent {
 		} else {
 			this.setState({
 				blurFlag: false,
-				tipShow: false,
+				tipShow: false
 			});
 		}
 		if (targetClassName === "CodeMirror-scroll") {
@@ -175,15 +137,14 @@ export default class FormulaEdit extends PureComponent {
 	}
 
 	cursorActivity = (cm) => {
-		const { readOnly, fieldList = [], methodList = [] } = this.props;
+		const { readOnly } = this.props;
 		if (readOnly) return;
 		const getCursor = cm.getCursor();
 		const pos = cm.cursorCoords(getCursor);
 		const getLineInfo = cm.getLine(getCursor.line);
 		const cursorBeforeOneChar = getLineInfo.substring(0, getCursor.ch);
-		const lastIndex = cursorBeforeOneChar.lastIndexOf("@", getCursor.ch);
-		const lastIndex2 = cursorBeforeOneChar.lastIndexOf("#", getCursor.ch);
-		if (fieldList.length > 0 && lastIndex !== -1 && lastIndex > lastIndex2) { // 监测@
+		if (cursorBeforeOneChar.includes("@")) {
+			const lastIndex = cursorBeforeOneChar.lastIndexOf("@", getCursor.ch);
 			const content = cursorBeforeOneChar.substring(lastIndex + 1, getCursor.ch);
 			const { fieldList } = this.props;
 			const findObj = fieldList.find(item => item.name.includes(content));
@@ -191,81 +152,63 @@ export default class FormulaEdit extends PureComponent {
 				this.setState({
 					posLeft: pos.left,
 					posTop: pos.top + 20,
-					tipShow: true,
-					tipShowType: "@"
+					tipShow: true
 				});
-				this.search(content, "@");
+				const e = { target: { value: content } };
+				this.search(e);
 			} else {
 				this.setState({
-					tipShow: false,
-					tipShowType: null
-				});
-			}
-		}
-		if (methodList.length > 0 && lastIndex2 !== -1 && lastIndex2 > lastIndex) { // 监测#
-			const content = cursorBeforeOneChar.substring(lastIndex2 + 1, getCursor.ch);
-			const { methodList } = this.props;
-			const findObj = methodList.find(item => item.name.includes(content));
-			if (findObj) {
-				this.setState({
-					posLeft: pos.left,
-					posTop: pos.top + 20,
-					tipShow: true,
-					tipShowType: "#"
-				});
-				this.search(content, "#");
-			} else {
-				this.setState({
-					tipShow: false,
-					tipShowType: null
+					tipShow: false
 				});
 			}
 		}
 		if (!cursorBeforeOneChar.includes("@") && !cursorBeforeOneChar.includes("#")) {
 			this.setState({
-				tipShow: false,
-				tipShowType: null
+				tipShow: false
 			});
 		}
 	}
 
-	search(val, type) {
-		const { fieldList, methodList } = this.props;
+	search(e) {
+		const { fieldList } = this.props;
+		const inputValue = e.target.value;
 		let list = [];
-		const searchList = type === "@" ? fieldList : methodList;
-		searchList.forEach((item) => {
-			if (item.name.includes(val)) {
+		fieldList.forEach((item) => {
+			if (item.name.includes(inputValue)) {
 				list.push(item);
 			}
 		});
 		this.setState({
-			dropList: list
+			copyFieldList: list
 		});
-		this.defaultFirst();
+		this.defaultFirst("@");
 	}
 
-	handleClick(item, type) {
+	handleClick(item) {
 		const getCursor = this.CodeMirrorEditor.getCursor();
 		const getLineInfo = this.CodeMirrorEditor.getLine(getCursor.line);
 		const cursorBeforeOneChar = getLineInfo.substring(0, getCursor.ch);
-		const lastIndex = cursorBeforeOneChar.lastIndexOf(type, getCursor.ch);
+		const lastIndex = cursorBeforeOneChar.lastIndexOf("@", getCursor.ch);
 		this.CodeMirrorEditor.setSelection(
 			{ line: getCursor.line, ch: lastIndex + 1 },
 			{ line: getCursor.line, ch: getCursor.ch },
 		);
-		let content = type === "@" ? item.name : item.value;
-		this.CodeMirrorEditor.replaceSelection(content);
-		this.CodeMirrorEditor.setCursor(getCursor.line, lastIndex + 1 + content.length);
+		this.CodeMirrorEditor.replaceSelection(item.name);
+		this.CodeMirrorEditor.setCursor(getCursor.line, lastIndex + 1 + item.name.length);
 		this.CodeMirrorEditor.focus();
 		this.setState({
 			tipShow: false,
-			tipShowType: null
+			inputValue: ""
 		});
 	}
 
-	enterFuc = (type) => {
+	enterFuc = (type, status) => {
 		let findLi = "cm-field-li";
 		let active = "cm-active";
+		if (status === "#") {
+			findLi = "cm-func-li";
+			active = "cm-func-active";
+		}
 		const nodeList = document.querySelectorAll(`.${findLi}`);
 		const length = nodeList.length;
 		let index = 0;
@@ -290,24 +233,24 @@ export default class FormulaEdit extends PureComponent {
 			}
 		} else if (type === "enter") {
 			const node = document.querySelector(`.${active}`);
-			const { tipShowType } = this.state;
-			this.handleClick({
-				name: node.innerText,
-				value: node.attributes.data.value
-			}, tipShowType);
+			this.handleClick({ name: node.innerText });
 			setTimeout(() => {
 				this.setState({
 					tipShow: false,
-					tipShowType: null
+					inputValue: ""
 				});
 			}, 100);
 		}
 		document.querySelector(`.${active}`).scrollIntoViewIfNeeded();
 	}
 
-	defaultFirst = () => {
+	defaultFirst = (status) => {
 		let findLi = "cm-field-li";
 		let active = "cm-active";
+		if (status === "#") {
+			findLi = "cm-func-li";
+			active = "cm-func-active";
+		}
 		const nodeList = document.querySelectorAll(`.${findLi}`);
 		if (nodeList.length > 0) {
 			for (let i = 0; i < nodeList.length; i++) {
@@ -318,11 +261,12 @@ export default class FormulaEdit extends PureComponent {
 	}
 
 	render() {
-		const { posLeft, posTop, tipShow, dropList } = this.state;
+		const { id, height } = this.props;
+		const { posLeft, posTop, tipShow, copyFieldList } = this.state;
 
 		return (
-			<div className="m-codemirror">
-				<textarea ref={this.ref}></textarea>
+			<div className="m-codemirror" style={height ? { height: height } : {}}>
+				<textarea id={id}></textarea>
 				{/* @弹框 */}
 				<div
 					className="codemirror-tipbox"
@@ -334,17 +278,13 @@ export default class FormulaEdit extends PureComponent {
 				>
 					<ul className="cm-field-ul">
 						{
-							dropList && dropList.length > 0 &&
-							dropList.map((item, index) => {
+							copyFieldList && copyFieldList.length > 0 &&
+							copyFieldList.map((item, index) => {
 								return (
 									<li
 										key={index}
 										className={index === 0 ? "cm-active cm-field-li" : "cm-field-li"}
-										data={item.value}
-										onClick={() => {
-											const { tipShowType } = this.state;
-											this.handleClick(item, tipShowType);
-										}}
+										onClick={() => this.handleClick(item)}
 									>
 										{item.name}
 									</li>
@@ -352,6 +292,10 @@ export default class FormulaEdit extends PureComponent {
 							})
 						}
 					</ul>
+					{
+						!copyFieldList || copyFieldList.length === 0 &&
+						<div className="codemirror-tipbox-nodata">无数据</div>
+					}
 				</div>
 			</div>
 		);

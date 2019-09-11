@@ -6,18 +6,18 @@
 
 import * as CodeMirror from "codemirror/lib/codemirror";
 
-(function (mod) {
+(function(mod) {
 	mod(CodeMirror);
-})(function (CodeMirror) {
+})(function(CodeMirror) {
 	"use strict";
 
-	CodeMirror.defineMode("defineScript", function () {
+	CodeMirror.defineMode("defineScript", function() {
 
 		const markList = [">=", "<=", "!=", "=", ">", "<", "+", "-", "*", "/",
 			"(", ")", ";", ",", ":", "{", "}"];
 
 		return {
-			token: function (stream) {
+			token: function(stream) {
 				// 空白空间
 				if (stream.eatSpace()) return null;
 
@@ -50,32 +50,13 @@ import * as CodeMirror from "codemirror/lib/codemirror";
 
 				// 处理@相关内容
 				const fieldKeywordArray = localStorage.codemirrorFieldList
-					? JSON.parse(localStorage.codemirrorFieldList) : [];
+					? localStorage.codemirrorFieldList.split(",") : [];
 				for (let i = 0; i < fieldKeywordArray.length; i++) {
 					if (stream.match(fieldKeywordArray[i])) {
 						return "field-keyword";
 					}
 				}
-				// if (fieldKeywordArray.length > 0 && stream.match("@")) { return "field-keyword"; }
-
-				// 处理#相关内容
-				const keywordFunctionArray = localStorage.codemirrorMethodList
-					? JSON.parse(localStorage.codemirrorMethodList) : [];
-				for (let i = 0; i < keywordFunctionArray.length; i++) {
-					if (stream.match(keywordFunctionArray[i])) {
-						return "function-keyword";
-					}
-				}
-				// if (keywordFunctionArray.length > 0 && stream.match("#")) { return "function-keyword"; }
-
-				// 处理自定义无需校验的关键词
-				const defineNormalList = localStorage.codemirrorNormalList
-					? JSON.parse(localStorage.codemirrorNormalList) : [];
-				for (let i = 0; i < defineNormalList.length; i++) {
-					if (stream.match(defineNormalList[i])) {
-						return "function-keyword";
-					}
-				}
+				if (stream.match("@")) { return "field-keyword"; }
 
 				// 处理未检测到的项目
 				stream.next();
