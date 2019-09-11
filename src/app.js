@@ -60,7 +60,7 @@ const getCode = (code, data) => {
 
 ReactDOM.render(
     <FormulaEdit
-        theme="3024-day" // 主题
+        theme="night" // 主题
         height={200} // 高度
         defaultValue={defaultCode} // 初始化值
         fieldList={fieldList} // @唤起

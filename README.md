@@ -15,7 +15,7 @@ npm install --save-dev formula-edit-react
 
 ```
 <FormulaEdit
-    theme="3024-day" // 主题
+    theme="day" // 主题
     height={200} // 高度
     defaultValue={defaultCode} // 初始化值
     fieldList={fieldList} // @唤起
@@ -59,7 +59,7 @@ normalList: [
 | :------:  | :-----: | :----:   | :------: | :----------: |
 | defaultValue | string  |  无      |   非必填    | 初始化赋值     |
 | height    | number  |  300     |   非必填  | 高度设置       |
-| theme    | string  |  3024-day     |   非必填  | 主题: 目前只支持两种：3024-day，3024-night |
+| theme    | string  |  day     |   非必填  | 主题: 目前只支持两种：day，night |
 | readOnly  | boolean |  false   |   非必填  | 设置只读       |
 | lineNumber  | boolean |  false   |   非必填  | 设置行号       |
 | fieldList | array   |  无      |   非必填  | 字段列表       |

@@ -3,34 +3,15 @@
         position: relative;
         overflow: hidden;
         border: #d7d7d7 solid 1px;
-        .codemirror-tipbox{
+        .codemirror-tip-day, .codemirror-tip-night{
             position: fixed;
             left: 0;
             top: 0;
             z-index: 999;
             background: #fff;
             width: 200px;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            border: 1px solid #ccc;
+            box-shadow: rgba(119, 119, 119, 0.2) 0px 0px 7px, rgba(0, 0, 0, 0) 1px 1px 0px inset, rgba(0, 0, 0, 0) -1px -1px 0px inset;
             font-size: 12px;
-            padding: 2px 0;
-            .codemirror-tipbox-search{
-                padding: 0 10px;
-                border-bottom: dashed #ccc 1px;
-                input{
-                    width: 100%;
-                    outline: none;
-                    border: none;
-                    height: 28px;
-                }
-            }
-            .codemirror-tipbox-nodata{
-                text-align: center;
-                height: 30px;
-                line-height: 30px;
-                color: #ccc;
-            }
             ul{
                 margin: 0;
                 padding: 0;
@@ -41,14 +22,13 @@
                     padding: 5px 10px;
                     cursor: pointer;
                     &:hover{
-                        background: #eee;
+                        background: #63acff;
+                        color: #fff;
                     }
                 }
                 .cm-active{
-                    background: #eee;
-                }
-                .cm-func-active{
-                    background: #eee;
+                    background: #63acff;
+                    color: #fff;
                 }
             }
         }
@@ -67,11 +47,14 @@
             span.cm-boolean-keyword{
                 color: #673AB7;
             }
-            span.cm-string{
-                color: #3a3432;
+            span.cm-string {
+                color: #cdab53;
+            }
+            span.cm-comment {
+                color: #9E9E9E;
             }
         }
-        .cm-s-3024-night{
+        .cm-s-material{
             span.cm-field-keyword{
                 color: #FF9800;
             }
@@ -83,24 +66,8 @@
                 border-bottom: #F44336 1px dotted;
             }
             span.cm-boolean-keyword{
-                color: #673AB7;
+                color: #7689f3;
             }
-            span.cm-string{
-                color: #3a3432;
-            }
-        }
-        // 重置antd样式
-        .ant-tag{
-            margin: 3px 8px 3px 0;
-        }
-    }
-    // 重置antd样式
-    .ant-popover-arrow{
-        background-color: #fff;
-    }
-    .ant-popover-inner-content{
-        .codemirror-tip{
-            max-width: 200px;
         }
     }
 }

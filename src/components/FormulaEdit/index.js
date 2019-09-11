@@ -9,7 +9,7 @@ import * as CodeMirror from "codemirror/lib/codemirror";
 import "./defineScript";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/3024-day.css";
-import "codemirror/theme/3024-night.css";
+import "codemirror/theme/material.css";
 import "./index.less";
 
 export default class FormulaEdit extends PureComponent {
@@ -63,14 +63,17 @@ export default class FormulaEdit extends PureComponent {
 	}
 
 	componentDidMount() {
-		const { defaultValue = "", readOnly = false, theme = "3024-day", lineNumber = true, height = 300 } = this.props;
+		const { defaultValue = "", readOnly = false, theme = "night", lineNumber = true, height = 300 } = this.props;
 		const { current } = this.ref;
 
 		this.setLocalStorage();
 
+		let turnTheme;
+		if (theme === "night") turnTheme = "material";
+		if (theme === "day") turnTheme = "3024-day";
 		this.CodeMirrorEditor = CodeMirror.fromTextArea(current, {
 			mode: "defineScript",
-			theme: theme,
+			theme: turnTheme,
 			lineNumbers: lineNumber,
 			readOnly: readOnly ? "nocursor" : false
 		});
@@ -141,11 +144,8 @@ export default class FormulaEdit extends PureComponent {
 		const targetClassName = e.target.className;
 		if (typeof (targetClassName) !== "string") return;
 		const list = [
-			"codemirror-tag",
-			"codemirror-tipbox-search-input",
-			"codemirror-tipbox-search",
-			"codemirror-tipbox",
-			"codemirror-tipbox-nodata"
+			"codemirror-tip-day",
+			"codemirror-tip-night"
 		];
 		const returnFalse = list.find(item => targetClassName.includes(item));
 		if (returnFalse) return false;
@@ -319,13 +319,14 @@ export default class FormulaEdit extends PureComponent {
 
 	render() {
 		const { posLeft, posTop, tipShow, dropList } = this.state;
+		const { theme } = this.props;
 
 		return (
 			<div className="m-codemirror">
 				<textarea ref={this.ref}></textarea>
 				{/* @弹框 */}
 				<div
-					className="codemirror-tipbox"
+					className={`codemirror-tip-${theme}`}
 					style={{
 						left: `${posLeft}px`,
 						top: `${posTop}px`,
