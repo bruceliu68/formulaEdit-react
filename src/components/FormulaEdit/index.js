@@ -40,8 +40,9 @@ export default class FormulaEdit extends PureComponent {
 	}
 
 	getLoacalList = (list, type) => {
+		const copyList = Object.assign([], list);
 		// 排序，把长的放前面
-		list.sort((a, b) => {
+		copyList.sort((a, b) => {
 			if (a.name.length > b.name.length) {
 				return -1;
 			}
@@ -51,13 +52,13 @@ export default class FormulaEdit extends PureComponent {
 			return 0;
 		});
 		let codemirrorList = [];
-		for (let i = 0; i < list.length; i++) {
-			codemirrorList.push(`${type}${list[i].name}`);
+		for (let i = 0; i < copyList.length; i++) {
+			codemirrorList.push(`${type}${copyList[i].name}`);
 		}
 		let obj = {};
-		if (type === "@") obj.fieldList = list;
-		if (type === "#") obj.methodList = list;
-		if (type === "") obj.normalList = list;
+		if (type === "@") obj.fieldList = copyList;
+		if (type === "#") obj.methodList = copyList;
+		if (type === "") obj.normalList = copyList;
 		this.setState({ ...obj });
 		return JSON.stringify(codemirrorList);
 	}

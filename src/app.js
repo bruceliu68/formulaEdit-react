@@ -13,10 +13,10 @@ const fieldList = [
     { name: "借款人身份证", value: "jkrsfz" }
 ];
 const methodList = [
+    { name: "求和", value: "求和(,)", realValue: "sum" },
     { name: "平均值", value: "平均值(,)", realValue: "avg" },
     { name: "最大值", value: "最大值(,)", realValue: "max" },
     { name: "最小值", value: "最小值(,)", realValue: "min" },
-    { name: "求和", value: "求和(,)", realValue: "sum" },
 ];
 const normalList = [
     { name: "且", value: "and" },
