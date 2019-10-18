@@ -138,7 +138,7 @@ export default class FormulaEdit extends PureComponent {
 		const preHeight = prevProps.height;
 		const nextHeight = this.props.height;
 		if (preHeight !== nextHeight && nextHeight) {
-			this.CodeMirrorEditor.setSize("auto", height);
+			this.CodeMirrorEditor.setSize("auto", nextHeight);
 		}
 	}
 

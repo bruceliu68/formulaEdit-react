@@ -61,7 +61,7 @@ const getCode = (code, data) => {
 ReactDOM.render(
     <FormulaEdit
         theme="night" // 主题
-        height={200} // 高度
+        height={300} // 高度
         defaultValue={defaultCode} // 初始化值
         fieldList={fieldList} // @唤起
         methodList={methodList} // #唤起
